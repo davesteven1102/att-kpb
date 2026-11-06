@@ -11,15 +11,17 @@ workflows:
       - name: Install dependencies
         script: |
           npm install
-      - name: Copy Web Assets & Sync Capacitor iOS
+          npm install @capacitor/ios
+      - name: Add & Sync Capacitor iOS
         script: |
+          npx cap add ios || true
           npx cap copy ios
           npx cap sync ios
       - name: CocoaPods Install
         script: |
           cd ios/App
           pod install
-      - name: Build iOS App (.ipa)
+      - name: Build iOS App (.app)
         script: |
           xcodebuild build \
             -workspace ios/App/App.xcworkspace \
@@ -31,4 +33,4 @@ workflows:
             CODE_SIGNING_ALLOWED=NO
     artifacts:
       - ios/App/build/Release-iphoneos/*.app
-      - build/ios/ipa/*.ipa
+      - ios/App/build/Release-iphoneos/*.ipa
